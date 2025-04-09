@@ -21,6 +21,11 @@ public enum ErrorCode {
     INVALID_PARAMETER_ERROR(10000, HttpStatus.BAD_REQUEST, "Invalid parameter error"),
     DUPLICATE_PARAMETER_ERROR(10001, HttpStatus.BAD_REQUEST, "Duplicate parameter error"),
 
+    //Authentication Error
+    AUTH_UNAUTHORIZED_ERROR(20000, HttpStatus.UNAUTHORIZED, "Unauthorized error"),
+    AUTH_FORBIDDEN_ERROR(20001, HttpStatus.FORBIDDEN, "Forbidden error"),
+    AUTH_EXPIRED_ERROR(20002, HttpStatus.UNAUTHORIZED, "Expired error"),
+
     //Not Found Error
     NOT_FOUND_ERROR(40000, HttpStatus.BAD_REQUEST, "Data not found error"),
 

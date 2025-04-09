@@ -20,6 +20,12 @@ public class ApiErrorResponse {
         this.message = message;
     }
 
+    public ApiErrorResponse(ErrorCode code) {
+        this.success = false;
+        this.code = code.getCode();
+        this.message = code.getMessage();
+    }
+
     public ApiErrorResponse(Boolean success, ErrorCode code) {
         this.success = success;
         this.code = code.getCode();
