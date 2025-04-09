@@ -29,6 +29,10 @@ public enum ErrorCode {
     //Not Found Error
     NOT_FOUND_ERROR(40000, HttpStatus.BAD_REQUEST, "Data not found error"),
 
+    //Redis Error
+    REDIS_VALUE_SET_ERROR(70000, HttpStatus.INTERNAL_SERVER_ERROR, "Redis value set error"),
+    REDIS_VALUE_GET_ERROR(70001, HttpStatus.INTERNAL_SERVER_ERROR, "Redis value get error"),
+
     INTERNAL_SERVER_ERROR(99999, HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
 
 
