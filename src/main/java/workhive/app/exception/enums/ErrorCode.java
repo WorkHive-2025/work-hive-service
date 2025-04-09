@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import workhive.app.exception.GeneralException;
 
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 @Slf4j
 @Getter
@@ -39,5 +41,15 @@ public enum ErrorCode {
                     log.error("[ErrorCode.valueOf] Error code not found: {}", code);
                     return new GeneralException(ErrorCode.INVALID_PARAMETER_ERROR, "Error code not found: " + code);
                 });
+    }
+
+    public String getMessage(Throwable e) {
+        return this.getMessage(this.getMessage() + " - " + e.getMessage());
+    }
+
+    public String getMessage(String message) {
+        return Optional.ofNullable(message)
+                .filter(Predicate.not(String::isBlank))
+                .orElse(this.getMessage());
     }
 }
