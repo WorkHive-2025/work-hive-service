@@ -38,11 +38,3 @@ create table user_auth
     foreign key (auth_id) references auth(auth_id)
 ) engine=InnoDB default charset=utf8mb4 comment '사용자 권한 테이블';
 
-create table test
-(
-    id bigint auto_increment primary key,
-    name bigin t not null,
-    auth_id bigint not null,
-    created_at datetime comment '생성일',
-    modified_at datetime comment '수정일'
-)
