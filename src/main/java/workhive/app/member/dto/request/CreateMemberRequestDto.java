@@ -2,6 +2,7 @@ package workhive.app.member.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import workhive.app.member.entity.Member;
 
 @Getter
 @Setter
@@ -18,4 +19,12 @@ public class CreateMemberRequestDto {
 
     @NotBlank(message = "이름은 필수입니다.")
     private String name;
+
+    public Member toEntity() {
+        return Member.builder()
+                .username(username)
+                .password(password)
+                .name(name)
+                .build();
+    }
 }

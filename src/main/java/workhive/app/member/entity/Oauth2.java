@@ -1,6 +1,7 @@
 package workhive.app.member.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -53,4 +54,12 @@ public class Oauth2  {
     @LastModifiedDate
     @Column(name = "updated_at")
     private String updatedAt;
+
+    @Builder
+    public Oauth2(Member member, String platform, String key, Map<String, Object> args) {
+        this.member = member;
+        this.platform = platform;
+        this.key = key;
+        this.args = args;
+    }
 }
