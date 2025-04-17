@@ -15,10 +15,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Table(
         name = "member",
         uniqueConstraints = {
-                @UniqueConstraint(name = "member_username_key", columnNames = "username")
-        },
-        indexes = {
-                @Index(name = "idx_member_username", columnList = "username")
+                @UniqueConstraint(name = "member_username_unique", columnNames = "username")
         }
 )
 public class Member {

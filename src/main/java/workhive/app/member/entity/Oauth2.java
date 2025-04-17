@@ -18,12 +18,8 @@ import java.util.Map;
 @Table(
         name = "oauth2",
         uniqueConstraints = {
-                @UniqueConstraint(name = "oauth2_key_platform_key", columnNames = {"key", "platform"}),
-                @UniqueConstraint(name = "oauth2_member_id_key", columnNames = "member_id")
-        },
-        indexes = {
-                @Index(name = "idx_oauth2_key_platform", columnList = "key, platform"),
-                @Index(name = "idx_oauth2_member_id", columnList = "member_id")
+                @UniqueConstraint(name = "oauth2_key_platform_unique", columnNames = {"key", "platform"}),
+                @UniqueConstraint(name = "oauth2_member_id_unique", columnNames = "member_id")
         }
 )
 public class Oauth2  {
