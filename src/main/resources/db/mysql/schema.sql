@@ -122,5 +122,30 @@ create table oauth2
 ) engine = InnoDB
   default charset = utf8mb4 comment 'OAuth2 테이블';
 
+create table permission
+(
+    permission_id bigint auto_increment primary key,
+    request_path  varchar(255) not null comment '요청 경로',
+    http_method   varchar(20)  not null comment 'HTTP 메서드',
+    description   varchar(255) comment '설명',
+    created_at    datetime comment '생성일',
+    modified_at   datetime comment '수정일',
+    constraint permission_request_path_http_method_unique unique (request_path, http_method)
+) engine = InnoDB
+  default charset = utf8mb4 comment '권한 테이블';
+
+create table role_permission
+(
+    role_permission_id bigint auto_increment primary key,
+    role_id            bigint not null,
+    permission_id      bigint not null,
+    created_at         datetime comment '생성일',
+    modified_at        datetime comment '수정일',
+    constraint role_permission_role_id_permission_id_unique unique (role_id, permission_id),
+    key idx_role_permission_role_id (role_id),
+    key idx_role_permission_permission_id (permission_id)
+) engine = InnoDB
+  default charset = utf8mb4 comment '역할 권한 테이블';
+
 
 
