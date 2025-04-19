@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import workhive.app.member.converter.MapToStringConverter;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
@@ -45,11 +46,11 @@ public class Oauth2  {
 
     @CreatedDate
     @Column(name = "created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
-    private String updatedAt;
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
 
     @Builder
     public Oauth2(Member member, String platform, String key, Map<String, Object> args) {

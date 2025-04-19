@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -39,11 +41,11 @@ public class Member {
 
     @CreatedDate
     @Column(name = "created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
-    private String updatedAt;
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
 
     @Builder
     public Member(String username, String password, String name, Boolean isActive) {
