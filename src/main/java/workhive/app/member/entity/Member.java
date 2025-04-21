@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -15,10 +17,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Table(
         name = "member",
         uniqueConstraints = {
-                @UniqueConstraint(name = "member_username_key", columnNames = "username")
-        },
-        indexes = {
-                @Index(name = "idx_member_username", columnList = "username")
+                @UniqueConstraint(name = "member_username_unique", columnNames = "username")
         }
 )
 public class Member {
@@ -42,11 +41,11 @@ public class Member {
 
     @CreatedDate
     @Column(name = "created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
-    private String updatedAt;
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
 
     @Builder
     public Member(String username, String password, String name, Boolean isActive) {
