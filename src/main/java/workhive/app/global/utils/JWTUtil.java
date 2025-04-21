@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import workhive.app.global.dto.TokenDto;
-import workhive.app.global.handler.RedisHandler;
+import workhive.app.global.service.RedisService;
 
 import javax.crypto.SecretKey;
 import java.time.Instant;
@@ -36,7 +36,7 @@ public class JWTUtil {
     private static final int KEY_SIZE = 256;
     private SecretKey key;
 
-    private final RedisHandler redisHandler;
+    private final RedisService redisService;
 
     @PostConstruct
     public void init() {
@@ -49,7 +49,7 @@ public class JWTUtil {
     public TokenDto generateToken(final String username) {
         String jwtKey = getJwtKey(username);
         // 1. 기존에 생성된 토큰 정보를 삭제
-        redisHandler.delete(jwtKey);
+        redisService.remove(jwtKey);
 
         // 2. Access Token 생성
         String accessToken = generateAccessToken(username);
@@ -58,11 +58,11 @@ public class JWTUtil {
         String refreshToken = generateRefreshToken();
 
         // 4. Redis에 Token 저장
-         redisHandler.execute(() -> {
-             redisHandler.getHashOperations().put(jwtKey, "accessToken", accessToken);
-             redisHandler.getHashOperations().put(jwtKey, "refreshToken", refreshToken);
-             redisHandler.setExpire(jwtKey, refreshExpire);
-         });
+        redisService.saveHashMap(
+                jwtKey,
+                Map.of("accessToken", accessToken, "refreshToken", refreshToken),
+                refreshExpire
+        );
 
         long now = new Date().getTime();
         return TokenDto.builder()
@@ -107,8 +107,8 @@ public class JWTUtil {
             Objects.requireNonNull(token);
             String userIdFromToken = getUserIdFromToken(token);
 
-            Object accessToken = redisHandler.getHashOperations()
-                    .get(getJwtKey(userIdFromToken), "accessToken");
+            Map<String, Object> tokenMap = redisService.getHashMap(getJwtKey(userIdFromToken));
+            Object accessToken = tokenMap.get("accessToken");
 
             if (accessToken == null) {
                 log.info("Access token is not found in Redis");
