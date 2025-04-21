@@ -12,6 +12,11 @@ public class ApiSuccessResponse<T> extends ApiErrorResponse {
 
     private final T data;
 
+    public ApiSuccessResponse() {
+        super(true, ErrorCode.OK.getCode(), ErrorCode.OK.getMessage());
+        this.data = null;
+    }
+
     public ApiSuccessResponse(T data) {
         super(true, ErrorCode.OK.getCode(), ErrorCode.OK.getMessage());
         this.data = data;

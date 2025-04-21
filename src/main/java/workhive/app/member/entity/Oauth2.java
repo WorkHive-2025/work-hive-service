@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import workhive.app.member.converter.MapToStringConverter;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Data
@@ -18,12 +19,8 @@ import java.util.Map;
 @Table(
         name = "oauth2",
         uniqueConstraints = {
-                @UniqueConstraint(name = "oauth2_key_platform_key", columnNames = {"key", "platform"}),
-                @UniqueConstraint(name = "oauth2_member_id_key", columnNames = "member_id")
-        },
-        indexes = {
-                @Index(name = "idx_oauth2_key_platform", columnList = "key, platform"),
-                @Index(name = "idx_oauth2_member_id", columnList = "member_id")
+                @UniqueConstraint(name = "oauth2_key_platform_unique", columnNames = {"key", "platform"}),
+                @UniqueConstraint(name = "oauth2_member_id_unique", columnNames = "member_id")
         }
 )
 public class Oauth2  {
@@ -49,11 +46,11 @@ public class Oauth2  {
 
     @CreatedDate
     @Column(name = "created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
-    private String updatedAt;
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
 
     @Builder
     public Oauth2(Member member, String platform, String key, Map<String, Object> args) {

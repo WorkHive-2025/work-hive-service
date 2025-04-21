@@ -1,40 +1,86 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS user_auth;
-DROP TABLE IF EXISTS user_info;
-DROP TABLE IF EXISTS auth;
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS member;
+DROP TABLE IF EXISTS member_role;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
-create table auth
+create table member
 (
-    auth_id bigint auto_increment primary key,
-    auth_code varchar(20) not null unique comment '권한 코드',
-    auth_name varchar(20) not null unique comment '권한 이름',
-    created_at datetime comment '생성일',
-    modified_at datetime comment '수정일'
-) engine=InnoDB default charset=utf8mb4 comment '권한 테이블';
-
-create table user_info
-(
-    user_id bigint auto_increment primary key,
-    login_id varchar(100) NOT NULL unique comment '로그인 아이디 OR 이메일',
-    login_pw varchar(100) comment '로그인 비밀번호',
-    user_name varchar(20) not null comment '사용자 이름',
-    created_at datetime comment '생성일',
+    member_id   bigint auto_increment primary key,
+    username    varchar(64) not null comment '사용자 로그인 ID',
+    password    varchar(255) comment '사용자 비밀번호',
+    name        varchar(64) comment '사용자 이름',
+    is_active   boolean     not null default true comment '활성화 여부',
+    created_at  datetime comment '생성일',
     modified_at datetime comment '수정일',
-    index (user_name)
-) engine=InnoDB default charset=utf8mb4 comment '사용자 정보 테이블';
+    constraint member_username_unique unique (username)
+) engine = InnoDB
+  default charset = utf8mb4 comment '사용자 테이블';
 
-create table user_auth
+create table role
 (
-    user_auth_id bigint auto_increment primary key,
-    user_id bigint not null,
-    auth_id bigint not null,
-    created_at datetime comment '생성일',
+    role_id     bigint auto_increment primary key,
+    role_code   varchar(20) not null comment '역할 코드',
+    role_name   varchar(20) not null comment '역할 이름',
+    created_at  datetime comment '생성일',
     modified_at datetime comment '수정일',
-    index (user_id, auth_id),
-    foreign key (user_id) references user_info(user_id),
-    foreign key (auth_id) references auth(auth_id)
-) engine=InnoDB default charset=utf8mb4 comment '사용자 권한 테이블';
+    constraint role_role_code_unique unique (role_code)
+) engine = InnoDB
+  default charset = utf8mb4 comment '역할 테이블';
+
+create table member_role
+(
+    member_role_id bigint auto_increment primary key,
+    member_id      bigint not null,
+    role_id        bigint not null,
+    created_at     datetime comment '생성일',
+    modified_at    datetime comment '수정일',
+    constraint member_role_member_id_role_id_unique unique (member_id, role_id),
+    key idx_member_role_member_id (member_id),
+    key idx_member_role_id (role_id)
+) engine = InnoDB
+  default charset = utf8mb4 comment '사용자 역할 테이블';
+
+create table oauth2
+(
+    oauth2_id   bigint auto_increment primary key,
+    member_id   bigint       not null,
+    platform    varchar(20)  not null comment 'OAuth2 플랫폼',
+    `key`       varchar(255) not null comment 'OAuth2 키',
+    args        varchar(255) comment 'OAuth2 인자',
+    created_at  datetime comment '생성일',
+    modified_at datetime comment '수정일',
+    constraint oauth2_key_platform_unique unique (platform, `key`),
+    constraint oauth2_member_id_unique unique (member_id)
+) engine = InnoDB
+  default charset = utf8mb4 comment 'OAuth2 테이블';
+
+create table permission
+(
+    permission_id bigint auto_increment primary key,
+    request_path  varchar(255) not null comment '요청 경로',
+    http_method   varchar(20)  not null comment 'HTTP 메서드',
+    description   varchar(255) comment '설명',
+    created_at    datetime comment '생성일',
+    modified_at   datetime comment '수정일',
+    constraint permission_request_path_http_method_unique unique (request_path, http_method)
+) engine = InnoDB
+  default charset = utf8mb4 comment '권한 테이블';
+
+create table role_permission
+(
+    role_permission_id bigint auto_increment primary key,
+    role_id            bigint not null,
+    permission_id      bigint not null,
+    created_at         datetime comment '생성일',
+    modified_at        datetime comment '수정일',
+    constraint role_permission_role_id_permission_id_unique unique (role_id, permission_id),
+    key idx_role_permission_role_id (role_id),
+    key idx_role_permission_permission_id (permission_id)
+) engine = InnoDB
+  default charset = utf8mb4 comment '역할 권한 테이블';
+
+
 
