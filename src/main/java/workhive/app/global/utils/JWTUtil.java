@@ -46,13 +46,13 @@ public class JWTUtil {
         key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto generateToken(final String userId) {
-        String jwtKey = getJwtKey(userId);
+    public TokenDto generateToken(final String username) {
+        String jwtKey = getJwtKey(username);
         // 1. 기존에 생성된 토큰 정보를 삭제
         redisHandler.delete(jwtKey);
 
         // 2. Access Token 생성
-        String accessToken = generateAccessToken(userId);
+        String accessToken = generateAccessToken(username);
 
         // 3. Refresh Token 생성
         String refreshToken = generateRefreshToken();
