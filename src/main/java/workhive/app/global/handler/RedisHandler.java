@@ -47,13 +47,8 @@ public class RedisHandler {
     }
 
     public void setExpire(String key, long timeout) {
-        try {
-            if (Boolean.TRUE.equals(hasKey(key))) {
-                redisTemplate.expire(key, timeout, TimeUnit.MICROSECONDS);
-            }
-        } catch (RuntimeException e) {
-            log.error("[RedisHandler.setExpire] Error setting expiration for key {}: {}", key, e.getMessage());
-            throw new GeneralException(ErrorCode.REDIS_VALUE_SET_ERROR, "Error setting expiration for key", e);
+        if (Boolean.TRUE.equals(hasKey(key))) {
+            redisTemplate.expire(key, timeout, TimeUnit.MICROSECONDS);
         }
     }
 
@@ -62,13 +57,8 @@ public class RedisHandler {
     }
 
     public void delete(String key) {
-        try {
-            if (Boolean.TRUE.equals(hasKey(key))) {
-                redisTemplate.delete(key);
-            }
-        } catch (RuntimeException e) {
-            log.error("[RedisHandler.delete] Error deleting value from Redis: {}", e.getMessage());
-            throw new GeneralException(ErrorCode.REDIS_VALUE_SET_ERROR, "Error deleting value from Redis", e);
+        if (Boolean.TRUE.equals(hasKey(key))) {
+            redisTemplate.delete(key);
         }
     }
 
@@ -78,10 +68,9 @@ public class RedisHandler {
      * @param operation
      * @return
      */
-    public int execute(Runnable operation) {
+    public void execute(Runnable operation) {
         try {
             operation.run();
-            return 1;
         } catch (Exception e) {
             log.error("[RedisHandler.execute] Error executing Redis operation: {}", e.getMessage());
             throw new GeneralException(ErrorCode.REDIS_VALUE_SET_ERROR, "Error executing Redis operation", e);
