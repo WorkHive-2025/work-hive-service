@@ -22,10 +22,17 @@ REDIS_DB=0
 JWT_SECRET_KEY=d29ya2hpdmVqd3RzZWNyZXRrZXkg
 ```
 
-### 3. application-dev.properties 추가
+### 2. application-dev.properties 추가
 ```bash
 #.env 파일을 읽어오기 위한 설정
 spring.config.import=optional:file:.env[.properties]
 ```
 
 ✅ 운용환경 설정은 application-prod.properties 에서 작성
+
+### 3. edit configuration 설정 (Develop 환경에서만 설정)
+Environment Variables에 아래와 같이 설정합니다.
+
+```bash
+ACTIVE_PROFILE=dev
+```
