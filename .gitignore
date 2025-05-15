@@ -205,3 +205,5 @@ gradle-app.setting
 #CUSTOM
 .idea/
 logs/
+.env
+application-dev.properties
